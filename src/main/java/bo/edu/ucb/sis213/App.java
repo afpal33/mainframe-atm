@@ -169,7 +169,7 @@ public class App {
             if (nuevoPin == confirmacionPin) {
                 pinActual = nuevoPin;
                 System.out.println("PIN actualizado con éxito.");
-                actualizarPinEnBaseDeDatos(connection, pinActual);
+                actualizarPinEnBaseDeDatos(connection, nuevoPin);
             } else {
                 System.out.println("Los PINs no coinciden.");
             }
