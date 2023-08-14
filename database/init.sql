@@ -34,4 +34,23 @@ INSERT INTO historico (usuario_id, tipo_operacion, cantidad) VALUES (3, 'depósi
 INSERT INTO historico (usuario_id, tipo_operacion, cantidad) VALUES (4, 'depósito', 750.0);
 INSERT INTO historico (usuario_id, tipo_operacion, cantidad) VALUES (5, 'depósito', 3000.0);
 
+DELIMITER //
+CREATE TRIGGER tr_actualizar_historico
+AFTER UPDATE ON usuarios
+FOR EACH ROW
+BEGIN
+    DECLARE operacion_tipo VARCHAR(50);
+
+    IF NEW.saldo <> OLD.saldo THEN
+        SET operacion_tipo = CASE
+            WHEN NEW.saldo > OLD.saldo THEN 'depósito'
+            ELSE 'retiro'
+        END;
+
+        INSERT INTO historico (usuario_id, tipo_operacion, cantidad)
+        VALUES (NEW.id, operacion_tipo, ABS(NEW.saldo - OLD.saldo));
+    END IF;
+END;
+//
+DELIMITER ;
 
