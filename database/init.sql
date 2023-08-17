@@ -50,6 +50,11 @@ BEGIN
         INSERT INTO historico (usuario_id, tipo_operacion, cantidad)
         VALUES (NEW.id, operacion_tipo, ABS(NEW.saldo - OLD.saldo));
     END IF;
+        IF NEW.pin <> OLD.pin THEN
+        INSERT INTO historico (usuario_id, tipo_operacion, cantidad)
+        VALUES (NEW.id, 'cambio de PIN', 0);
+    END IF;
+
 END;
 //
 DELIMITER ;

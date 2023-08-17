@@ -10,6 +10,7 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JPasswordField;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.awt.event.ActionEvent;
 import javax.swing.SwingConstants;
 
@@ -55,7 +56,94 @@ public class PopupPinChange extends JFrame {
 		lblRepitaSuNuevo.setBounds(117, 70, 186, 19);
 		contentPane.add(lblRepitaSuNuevo);
 		
+		SecPass = new JPasswordField(4);
+		SecPass.setHorizontalAlignment(SwingConstants.CENTER);
+		SecPass.setBounds(132, 101, 114, 19);
+		contentPane.add(SecPass);
+		
+		FirstPass = new JPasswordField(4);
+		FirstPass.setHorizontalAlignment(SwingConstants.CENTER);
+		FirstPass.setBounds(132, 43, 114, 19);
+		contentPane.add(FirstPass);
 		JButton btnOk = new JButton("Ok");
+		btnOk.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int pinA = Integer.parseInt(FirstPass.getText());
+				int pinB = Integer.parseInt(SecPass.getText());
+				if (pinA != pinB) {
+					JFrame framesito = new JFrame("Error");
+	        	    framesito.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	        	    framesito.setSize(300, 150);
+	        	    framesito.setLayout(null);
+	        	    framesito.setLocationRelativeTo(null);
+	        	    
+	        	    JLabel label = new JLabel("<html><br>Las contraseñas no coinciden<br><br></html>");
+	        	    label.setHorizontalAlignment(JLabel.CENTER);
+	        	    label.setBounds(0, 30, 300, 50);
+	        	    framesito.add(label);
+	        	    
+	        	    JButton btnOk = new JButton("Ok");
+	        	    btnOk.setBounds(100, 90, 100, 30);
+	        	    btnOk.addActionListener(new ActionListener() {
+	        	        public void actionPerformed(ActionEvent e) {
+	        	            framesito.dispose();
+	        	        }
+	        	    });
+	        	    framesito.add(btnOk);
+	        	    
+	        	    framesito.setVisible(true);
+				} else {
+					
+					try {
+						App.cambiarPIN(pinA);
+						dispose();
+						JFrame frame = new JFrame("Operación exitosa");
+		        	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		        	    frame.setSize(300, 150);
+		        	    frame.setLayout(null);
+		        	    frame.setLocationRelativeTo(null);
+		        	    
+		        	    JLabel label = new JLabel("<html><br>Se cambió el pin de forma exitosa.<br><br></html>");
+		        	    label.setHorizontalAlignment(JLabel.CENTER);
+		        	    label.setBounds(0, 30, 300, 50);
+		        	    frame.add(label);
+		        	    
+		        	    JButton btnOk = new JButton("Ok");
+		        	    btnOk.setBounds(100, 90, 100, 30);
+		        	    btnOk.addActionListener(new ActionListener() {
+		        	        public void actionPerformed(ActionEvent e) {
+		        	            frame.dispose();
+		        	        }
+		        	    });
+		        	    frame.add(btnOk);
+		        	    
+		        	    frame.setVisible(true);
+					} catch (SQLException e1) {
+						JFrame frame = new JFrame("Error");
+		        	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		        	    frame.setSize(300, 150);
+		        	    frame.setLayout(null);
+		        	    frame.setLocationRelativeTo(null);
+		        	    
+		        	    JLabel label = new JLabel("<html><br>Hubo un error inesperado. Por favor, inténtelo de nuevo.<br><br></html>");
+		        	    label.setHorizontalAlignment(JLabel.CENTER);
+		        	    label.setBounds(0, 30, 300, 50);
+		        	    frame.add(label);
+		        	    
+		        	    JButton btnOk = new JButton("Ok");
+		        	    btnOk.setBounds(100, 90, 100, 30);
+		        	    btnOk.addActionListener(new ActionListener() {
+		        	        public void actionPerformed(ActionEvent e) {
+		        	            frame.dispose();
+		        	        }
+		        	    });
+		        	    frame.add(btnOk);
+		        	    
+		        	    frame.setVisible(true);
+					}
+				}
+			}
+		});
 		btnOk.setBounds(59, 145, 117, 25);
 		contentPane.add(btnOk);
 		
@@ -68,14 +156,6 @@ public class PopupPinChange extends JFrame {
 		btnCancelar.setBounds(203, 145, 117, 25);
 		contentPane.add(btnCancelar);
 		
-		SecPass = new JPasswordField(4);
-		SecPass.setHorizontalAlignment(SwingConstants.CENTER);
-		SecPass.setBounds(132, 101, 114, 19);
-		contentPane.add(SecPass);
 		
-		FirstPass = new JPasswordField(4);
-		FirstPass.setHorizontalAlignment(SwingConstants.CENTER);
-		FirstPass.setBounds(132, 43, 114, 19);
-		contentPane.add(FirstPass);
 	}
 }

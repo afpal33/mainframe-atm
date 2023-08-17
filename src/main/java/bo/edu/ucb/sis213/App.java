@@ -95,7 +95,6 @@ public class App extends JFrame{
         }
     }
     
-
     public static boolean validarPIN(Connection connection, int pin) {
         String query = "SELECT id, saldo FROM usuarios WHERE pin = ?";
         try {
@@ -251,27 +250,9 @@ public class App extends JFrame{
         }
     }
 
-    public static void cambiarPIN(Connection connection) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Ingrese su PIN actual: ");
-        int pinIngresado = scanner.nextInt();
-
-        if (pinIngresado == pinActual) {
-            System.out.print("Ingrese su nuevo PIN: ");
-            int nuevoPin = scanner.nextInt();
-            System.out.print("Confirme su nuevo PIN: ");
-            int confirmacionPin = scanner.nextInt();
-
-            if (nuevoPin == confirmacionPin) {
-                pinActual = nuevoPin;
-                System.out.println("PIN actualizado con éxito.");
-                actualizarPinEnBaseDeDatos(connection, nuevoPin);
-            } else {
-                System.out.println("Los PINs no coinciden.");
-            }
-        } else {
-            System.out.println("PIN incorrecto.");
-        }
+    public static void cambiarPIN(int pinA) throws SQLException {
+        Connection connection = getConnection();
+        actualizarPinEnBaseDeDatos(connection, pinA);
     }
     public static void actualizarSaldoEnBaseDeDatos(Connection connection, double nuevoSaldo) {
         String query = "UPDATE usuarios SET saldo = ? WHERE id = ?";
@@ -313,6 +294,26 @@ public class App extends JFrame{
             e.printStackTrace();
         }
     }
+    
+    public static String mostrarUsuario() throws SQLException {
+        Connection connection = getConnection();
+    	String usuario = null;
+        String query = "SELECT nombre FROM usuarios WHERE id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, usuarioId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                usuario = resultSet.getString("nombre");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        return usuario;
+    }
+    
     public static boolean handleEnteredPin(int pin) throws SQLException {
     	double sueldo = 0;
     	Connection connection=getConnection();

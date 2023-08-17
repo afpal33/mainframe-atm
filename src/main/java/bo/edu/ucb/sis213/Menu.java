@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.awt.event.ActionEvent;
 
 public class Menu extends JFrame{
@@ -32,8 +33,9 @@ public class Menu extends JFrame{
 	/**
 	 * Create the application.
 	 * @param saldo2 
+	 * @throws SQLException 
 	 */
-	public Menu(double sueldo) {
+	public Menu(double sueldo) throws SQLException {
         setTitle("MENU PRINCIPAL");
         setSize(450, 300);
         setLocationRelativeTo(null);
@@ -43,8 +45,9 @@ public class Menu extends JFrame{
 
 	/**
 	 * Initialize the contents of the frame.
+	 * @throws SQLException 
 	 */
-	private void initialize(double sueldo) {
+	private void initialize(double sueldo) throws SQLException {
 		frame2 = new JFrame();
 		frame2.setSize(450, 300);
 		frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -53,6 +56,8 @@ public class Menu extends JFrame{
 		JLabel lblMenuPrincipal = new JLabel("MENU PRINCIPAL");
 		lblMenuPrincipal.setBounds(169, 12, 121, 15);
 		frame2.getContentPane().add(lblMenuPrincipal);
+		
+		
 		
 		JButton btnSaldo = new JButton("Consultar Saldo");
 		btnSaldo.addActionListener(new ActionListener() {
@@ -105,6 +110,15 @@ public class Menu extends JFrame{
 		});
 		btnSalir.setBounds(143, 214, 160, 25);
 		frame2.getContentPane().add(btnSalir);
+		
+		JLabel lblUsuario = new JLabel("usuario: ");
+		lblUsuario.setBounds(221, 251, 70, 15);
+		frame2.getContentPane().add(lblUsuario);
+		
+		String user = App.mostrarUsuario();
+		JLabel lblNewLabel = new JLabel(user);
+		lblNewLabel.setBounds(286, 251, 142, 15);
+		frame2.getContentPane().add(lblNewLabel);
 		
 	    frame2.setLocationRelativeTo(null);
 
