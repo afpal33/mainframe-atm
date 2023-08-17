@@ -1,6 +1,7 @@
 package bo.edu.ucb.sis213;
 
 import java.util.Scanner;
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
@@ -61,24 +62,37 @@ public class App extends JFrame{
         Connection connection = null;
         try {
             connection = getConnection();
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    PinWindow PinWindow = new PinWindow();
+                    PinWindow.setVisible(true);
+                }
+            });
         } catch (SQLException ex) {
-            System.err.println("No se puede conectar a Base de Datos");
-            JFrame frameErr = new JFrame("Error");
-            frameErr.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            
-            JLabel labelErr = new JLabel("<html><br>No se pudo conectar con la base de datos.<br><br></html>");
-            labelErr.setHorizontalAlignment(JLabel.CENTER);
-            ex.printStackTrace();
-            System.exit(1);
-            
+        	   JFrame frameErr = new JFrame("Error");
+        	    frameErr.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        	    frameErr.setSize(300, 150);
+        	    frameErr.setLayout(null);
+        	    frameErr.setLocationRelativeTo(null);
+        	    
+        	    JLabel labelErr = new JLabel("<html><br>No se pudo conectar con la base de datos.<br><br></html>");
+        	    labelErr.setHorizontalAlignment(JLabel.CENTER);
+        	    labelErr.setBounds(0, 30, 300, 50);
+        	    frameErr.add(labelErr);
+        	    
+        	    JButton btnOk = new JButton("Ok");
+        	    btnOk.setBounds(100, 90, 100, 30);
+        	    btnOk.addActionListener(new ActionListener() {
+        	        public void actionPerformed(ActionEvent e) {
+        	            ex.printStackTrace();
+        	            System.exit(1);
+        	        }
+        	    });
+        	    frameErr.add(btnOk);
+        	    
+        	    frameErr.setVisible(true);
         }
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                PinWindow PinWindow = new PinWindow();
-                PinWindow.setVisible(true);
-            }
-        });
     }
     
 
@@ -100,37 +114,138 @@ public class App extends JFrame{
         return false;
     }
 
-    public static void consultarSaldo() {
-        System.out.println("Su saldo actual es: $" + saldo);
+    public static double consultarSaldo(Connection connection) {
+    	double nuevosaldo = mostrarNuevoSaldo(connection);
+		return nuevosaldo;
     }
 
-    public static void realizarDeposito(Connection connection) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Ingrese la cantidad a depositar: $");
-        double cantidad = scanner.nextDouble();
-
-        if (cantidad <= 0) {
-            System.out.println("Cantidad no válida.");
-        } else {
-            saldo += cantidad;
-            System.out.println("Depósito realizado con éxito. Su nuevo saldo es: $" + saldo);
-            actualizarSaldoEnBaseDeDatos(connection, saldo);
-
+    public static void realizarDepositoConMonto(double monto) {
+        Connection connection = null;
+        try {
+            connection = getConnection();
+            if (monto <= 0) {
+            	JFrame frame = new JFrame("Error");
+        	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        	    frame.setSize(300, 150);
+        	    frame.setLayout(null);
+        	    frame.setLocationRelativeTo(null);
+        	    
+        	    JLabel label = new JLabel("<html><br>Monto inválido<br><br></html>");
+        	    label.setHorizontalAlignment(JLabel.CENTER);
+        	    label.setBounds(0, 30, 300, 50);
+        	    frame.add(label);
+        	    
+        	    JButton btnOk = new JButton("Ok");
+        	    btnOk.setBounds(100, 90, 100, 30);
+        	    btnOk.addActionListener(new ActionListener() {
+        	        public void actionPerformed(ActionEvent e) {
+        	            frame.dispose();
+        	        }
+        	    });
+        	    frame.add(btnOk);
+        	    
+        	    frame.setVisible(true);
+            } else {
+                saldo += monto;
+                JFrame frame = new JFrame("Depósito Realizado");
+        	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        	    frame.setSize(300, 150);
+        	    frame.setLayout(null);
+        	    frame.setLocationRelativeTo(null);
+        	    
+        	    JLabel label = new JLabel("<html><br>El depósito se realizó con éxito. Su saldo es: "+saldo+"<br><br></html>");
+        	    label.setHorizontalAlignment(JLabel.CENTER);
+        	    label.setBounds(0, 30, 300, 50);
+        	    frame.add(label);
+        	    
+        	    JButton btnOk = new JButton("Ok");
+        	    btnOk.setBounds(100, 90, 100, 30);
+        	    btnOk.addActionListener(new ActionListener() {
+        	        public void actionPerformed(ActionEvent e) {
+        	            frame.dispose();
+        	        }
+        	    });
+        	    frame.add(btnOk);
+        	    
+        	    frame.setVisible(true);
+                actualizarSaldoEnBaseDeDatos(connection, saldo);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
     }
 
-    public static void realizarRetiro(Connection connection) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Ingrese la cantidad a retirar: $");
-        double cantidad = scanner.nextDouble();
 
-        if (cantidad <= 0) {
-            System.out.println("Cantidad no válida.");
-        } else if (cantidad > saldo) {
-            System.out.println("Saldo insuficiente.");
+    public static void realizarRetiro(double monto) throws SQLException {
+    	Connection connection = getConnection();
+
+        if (monto <= 0) {
+        	JFrame frame = new JFrame("Error");
+    	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    	    frame.setSize(300, 150);
+    	    frame.setLayout(null);
+    	    frame.setLocationRelativeTo(null);
+    	    
+    	    JLabel label = new JLabel("<html><br>Monto inválido<br><br></html>");
+    	    label.setHorizontalAlignment(JLabel.CENTER);
+    	    label.setBounds(0, 30, 300, 50);
+    	    frame.add(label);
+    	    
+    	    JButton btnOk = new JButton("Ok");
+    	    btnOk.setBounds(100, 90, 100, 30);
+    	    btnOk.addActionListener(new ActionListener() {
+    	        public void actionPerformed(ActionEvent e) {
+    	            frame.dispose();
+    	        }
+    	    });
+    	    frame.add(btnOk);
+    	    
+    	    frame.setVisible(true);
+        } else if (monto > saldo) {
+        	JFrame frame = new JFrame("Error");
+    	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    	    frame.setSize(300, 150);
+    	    frame.setLayout(null);
+    	    frame.setLocationRelativeTo(null);
+    	    
+    	    JLabel label = new JLabel("<html><br>Saldo insuficiente. <br><br></html>");
+    	    label.setHorizontalAlignment(JLabel.CENTER);
+    	    label.setBounds(0, 30, 300, 50);
+    	    frame.add(label);
+    	    
+    	    JButton btnOk = new JButton("Ok");
+    	    btnOk.setBounds(100, 90, 100, 30);
+    	    btnOk.addActionListener(new ActionListener() {
+    	        public void actionPerformed(ActionEvent e) {
+    	            frame.dispose();
+    	        }
+    	    });
+    	    frame.add(btnOk);
+    	    
+    	    frame.setVisible(true);
         } else {
-            saldo -= cantidad;
-            System.out.println("Retiro realizado con éxito. Su nuevo saldo es: $" + saldo);
+            saldo -= monto;
+            JFrame frame = new JFrame("Retiro Realizado");
+    	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    	    frame.setSize(300, 150);
+    	    frame.setLayout(null);
+    	    frame.setLocationRelativeTo(null);
+    	    
+    	    JLabel label = new JLabel("<html><br>El retiro se realizó con éxito. Su saldo es: "+saldo+"<br><br></html>");
+    	    label.setHorizontalAlignment(JLabel.CENTER);
+    	    label.setBounds(0, 30, 300, 50);
+    	    frame.add(label);
+    	    
+    	    JButton btnOk = new JButton("Ok");
+    	    btnOk.setBounds(100, 90, 100, 30);
+    	    btnOk.addActionListener(new ActionListener() {
+    	        public void actionPerformed(ActionEvent e) {
+    	            frame.dispose();
+    	        }
+    	    });
+    	    frame.add(btnOk);
+    	    
+    	    frame.setVisible(true);
             actualizarSaldoEnBaseDeDatos(connection, saldo);
 
         }
@@ -169,6 +284,23 @@ public class App extends JFrame{
             e.printStackTrace();
         }
     }
+    public static double mostrarNuevoSaldo(Connection connection) {
+        double nuevoSaldo = 0;
+        String query = "SELECT saldo FROM usuarios WHERE id = ?";
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, usuarioId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                nuevoSaldo = resultSet.getDouble("saldo");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        return nuevoSaldo;
+    }
     
     public static void actualizarPinEnBaseDeDatos(Connection connection, int nuevoPin) {
         String query = "UPDATE usuarios SET pin = ? WHERE id = ?";
@@ -182,10 +314,12 @@ public class App extends JFrame{
         }
     }
     public static boolean handleEnteredPin(int pin) throws SQLException {
+    	double sueldo = 0;
     	Connection connection=getConnection();
           if (validarPIN(connection, pin)) {
               pinActual = pin;
-              Menu menu = new Menu();
+              double sueldo2=consultarSaldo(connection);
+              Menu menu = new Menu(sueldo2);
               return true;
           } else {
               return false; 

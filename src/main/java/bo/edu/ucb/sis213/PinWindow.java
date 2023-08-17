@@ -11,12 +11,15 @@ public class PinWindow extends JFrame {
     private int intentos =3;
     public PinWindow() {
         setTitle("Ingresar PIN");
-        setSize(300, 150);
+        setSize(300, 113);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        pinTextField = new JTextField(10);
+        pinTextField = new JPasswordField(4);
+        pinTextField.setHorizontalAlignment(SwingConstants.CENTER);
+        pinTextField.setBounds(145, 8, 111, 19);
         submitButton = new JButton("Aceptar");
+        submitButton.setBounds(91, 46, 89, 25);
 
         submitButton.addActionListener(new ActionListener() {
             @Override
@@ -41,11 +44,14 @@ public class PinWindow extends JFrame {
         });
 
         JPanel panel = new JPanel();
-        panel.add(new JLabel("Ingrese su PIN: "));
+        panel.setLayout(null);
+        JLabel label = new JLabel("Ingrese su PIN: ");
+        label.setBounds(16, 10, 111, 15);
+        panel.add(label);
         panel.add(pinTextField);
         panel.add(submitButton);
 
-        add(panel);
+        getContentPane().add(panel);
         setVisible(true);
     }
 }

@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 public class Menu extends JFrame{
 
 	private JFrame frame2;
+	private static double sueldo;
 
 	/**
 	 * Launch the application.
@@ -19,7 +20,7 @@ public class Menu extends JFrame{
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Menu window = new Menu();
+					Menu window = new Menu(sueldo);
 					window.frame2.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -30,19 +31,20 @@ public class Menu extends JFrame{
 
 	/**
 	 * Create the application.
+	 * @param saldo2 
 	 */
-	public Menu() {
+	public Menu(double sueldo) {
         setTitle("MENU PRINCIPAL");
         setSize(450, 300);
         setLocationRelativeTo(null);
-		initialize();
+		initialize(sueldo);
 		
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize() {
+	private void initialize(double sueldo) {
 		frame2 = new JFrame();
 		frame2.setSize(450, 300);
 		frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -53,18 +55,44 @@ public class Menu extends JFrame{
 		frame2.getContentPane().add(lblMenuPrincipal);
 		
 		JButton btnSaldo = new JButton("Consultar Saldo");
+		btnSaldo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				PopupSaldo saldo2 = new PopupSaldo(sueldo);
+			}
+		});
 		btnSaldo.setBounds(143, 39, 160, 25);
 		frame2.getContentPane().add(btnSaldo);
 		
 		JButton btnRealizarDep = new JButton("Realizar depósito");
+		btnRealizarDep.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				PopupDeposito depo = new PopupDeposito();
+				depo.setLocationRelativeTo(null);
+				depo.setVisible(true);
+			}
+		});
 		btnRealizarDep.setBounds(143, 76, 160, 25);
 		frame2.getContentPane().add(btnRealizarDep);
 		
 		JButton btnRetiro = new JButton("Realizar Retiro");
+		btnRetiro.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				PopupRetiro retiro = new PopupRetiro();
+				retiro.setLocationRelativeTo(null);
+				retiro.setVisible(true);
+			}
+		});
 		btnRetiro.setBounds(143, 113, 160, 25);
 		frame2.getContentPane().add(btnRetiro);
 		
 		JButton btnPin = new JButton("Cambiar Pin");
+		btnPin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				PopupPinChange pinChange = new PopupPinChange();
+				pinChange.setLocationRelativeTo(null);
+				pinChange.setVisible(true);
+			}
+		});
 		btnPin.setBounds(143, 150, 160, 25);
 		frame2.getContentPane().add(btnPin);
 		
