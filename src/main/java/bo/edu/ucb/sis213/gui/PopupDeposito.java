@@ -1,19 +1,20 @@
-package bo.edu.ucb.sis213;
+package bo.edu.ucb.sis213.gui;
 
 import java.awt.EventQueue;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import bo.edu.ucb.sis213.App;
+
 import javax.swing.JLabel;
 import javax.swing.JTextField;
-import javax.swing.JButton;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.awt.event.ActionEvent;
-
-public class PopupRetiro extends JFrame {
+import bo.edu.ucb.sis213.core.*;
+public class PopupDeposito extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField textField;
@@ -25,8 +26,8 @@ public class PopupRetiro extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					PopupRetiro frame5 = new PopupRetiro();
-					frame5.setVisible(true);
+					PopupDeposito frame4 = new PopupDeposito();
+					frame4.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -37,7 +38,7 @@ public class PopupRetiro extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public PopupRetiro() {
+	public PopupDeposito() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 348, 164);
 		contentPane = new JPanel();
@@ -46,8 +47,8 @@ public class PopupRetiro extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("Ingrese monto a retirar");
-		lblNewLabel.setBounds(85, 12, 253, 15);
+		JLabel lblNewLabel = new JLabel("Ingrese monto a depositar");
+		lblNewLabel.setBounds(73, 12, 253, 15);
 		contentPane.add(lblNewLabel);
 		
 		JLabel lblNewLabel_1 = new JLabel("$");
@@ -58,16 +59,15 @@ public class PopupRetiro extends JFrame {
 		textField.setBounds(116, 65, 114, 19);
 		contentPane.add(textField);
 		textField.setColumns(10);
-		
 		JButton btnOk = new JButton("Ok");
 		btnOk.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String montoString = textField.getText();
-				try {
+		        try {
 		            double monto = Double.parseDouble(montoString);
-		            App.realizarRetiro(monto);
+		            OperacionesCajero.realizarDepositoConMonto(monto);
 		            dispose();
-		        } catch (NumberFormatException | SQLException ex) {
+		        } catch (NumberFormatException ex) {
 		            System.out.println("Monto no válido. Ingrese un número válido.");
 		        }
 			}

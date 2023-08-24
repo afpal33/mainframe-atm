@@ -1,6 +1,7 @@
-package bo.edu.ucb.sis213;
+package bo.edu.ucb.sis213.gui;
 
 import java.awt.EventQueue;
+import bo.edu.ucb.sis213.core.*;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -8,7 +9,7 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.awt.event.ActionEvent;
-
+import bo.edu.ucb.sis213.*;
 public class Menu extends JFrame{
 
 	private JFrame frame2;
@@ -115,7 +116,7 @@ public class Menu extends JFrame{
 		lblUsuario.setBounds(221, 251, 70, 15);
 		frame2.getContentPane().add(lblUsuario);
 		
-		String user = App.mostrarUsuario();
+		String user = OperacionesCajero.mostrarUsuario();
 		JLabel lblNewLabel = new JLabel(user);
 		lblNewLabel.setBounds(286, 251, 142, 15);
 		frame2.getContentPane().add(lblNewLabel);

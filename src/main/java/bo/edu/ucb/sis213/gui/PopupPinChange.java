@@ -1,10 +1,14 @@
-package bo.edu.ucb.sis213;
+package bo.edu.ucb.sis213.gui;
 
 import java.awt.EventQueue;
+import bo.edu.ucb.sis213.core.*;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import bo.edu.ucb.sis213.App;
+
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -95,7 +99,7 @@ public class PopupPinChange extends JFrame {
 				} else {
 					
 					try {
-						App.cambiarPIN(pinA);
+						OperacionesCajero.cambiarPIN(pinA);
 						dispose();
 						JFrame frame = new JFrame("Operación exitosa");
 		        	    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

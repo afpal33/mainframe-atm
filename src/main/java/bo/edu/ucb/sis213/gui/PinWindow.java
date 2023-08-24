@@ -1,6 +1,10 @@
-package bo.edu.ucb.sis213;
+package bo.edu.ucb.sis213.gui;
 
 import javax.swing.*;
+import bo.edu.ucb.sis213.core.*;
+
+import bo.edu.ucb.sis213.App;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
@@ -26,7 +30,7 @@ public class PinWindow extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 int pin = Integer.parseInt(pinTextField.getText());
                 try {
-                    if (App.handleEnteredPin(pin)) {
+                    if (OperacionesCajero.handleEnteredPin(pin)) {
                     	dispose(); 
                     } else {
                         intentos--;
